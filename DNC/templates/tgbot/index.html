@@ -1,0 +1,43 @@
+{% extends 'tgbot/base.html' %}
+
+
+{% block title %}{{ title }}{% endblock %}
+
+
+{% block content %}
+<h1>Закупки</h1>
+
+<div class="card border-light shadow p-3 bg-body rounded mt-3">
+
+<div class="card-body px-0 py-0">
+<div class="table-responsive scrollbar">
+    <table class="table table-sm fs-10 mb-0 overflow-hidden">
+        <thead >
+            <tr>
+                <th class="bg-secondary-subtle">Номер закупки</th>
+                <th class="bg-secondary-subtle">Статус</th>
+                <th class="bg-secondary-subtle">Окончание подачи заявок</th>
+                <th class="bg-secondary-subtle">Пользователь</th>
+                <th class="bg-secondary-subtle">Дата закрепления за пользователем</th>
+            </tr>
+        </thead>
+        <tbody>
+{% for el in zacup_list %}
+
+<tr>
+    <td>№ {{ el.doc_number }}</td>
+    <td>{{ el.status }}</td>
+    <td>{{ el.final_date }}</td>
+    <td>{{ el.bot_user.user_surname }}</a> </td>
+    <td>{{ el.booking_date }}</a> </td>
+</tr>
+
+{% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
+
+
+{% endblock %}

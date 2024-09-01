@@ -1,0 +1,45 @@
+{% extends 'tgbot/base.html' %}
+
+
+{% block title %}{{ title }}{% endblock %}
+
+
+{% block content %}
+<h1>Пользователи</h1>
+
+<div class="card border-light shadow p-3 bg-body rounded mt-3">
+
+<div class="card-body px-0 py-0">
+<div class="table-responsive scrollbar">
+    <table class="table table-sm fs-10 mb-0 overflow-hidden">
+        <thead >
+            <tr>
+                <th class="bg-secondary-subtle">Фамилия</th>
+                <th class="bg-secondary-subtle">Имя</th>
+                <th class="bg-secondary-subtle">Telegram ID</th>
+                <th class="bg-secondary-subtle">Ник в телеграм</th>
+                <th class="bg-secondary-subtle">Дата регистрации</th>
+                <th class="bg-secondary-subtle">Доступ разрешен</th>
+            </tr>
+        </thead>
+        <tbody>
+{% for el in users_list %}
+
+<tr>
+    <td>{{ el.user_surname }}</td>
+    <td>{{ el.user_name }}</td>
+    <td>{{ el.tg_id }}</td>
+    <td>{{ el.tg_nic }}</a> </td>
+    <td>{{ el.date_of_registration }}</a> </td>
+    <td>{{ el.access_granted }}</a> </td>
+</tr>
+
+{% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
+
+
+{% endblock %}

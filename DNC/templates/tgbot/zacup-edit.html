@@ -1,0 +1,54 @@
+{% extends 'Accounting/base.html' %}
+
+
+{% block title %}Редактировать договор{% endblock %}
+
+
+{% block content %}
+<h1 class="mb-4">Редактировать договор</h1>
+<div class="card border-light shadow p-3 bg-body rounded">
+    <h4 class="ms-2">Редактировать данные договора </h4>
+  <div class="m-2">
+<form method="POST">
+    {% csrf_token %}
+<div class="mb-3">
+    <label class="form-label">Номер договора</label>
+{{ form.nomer_dogovora }}
+</div>
+<div class="mb-3">
+    <label class="form-label">Дата договора</label>
+{{ form.date_of_signing }}
+</div>
+<div class="mb-3">
+    <label class="form-label">Сайт</label>
+{{ form.web_site }}
+</div>
+<div class="mb-3">
+    <label class="form-label">Тип услуги</label>
+{{ form.service_type }}
+</div>
+<div class="mb-3">
+    <label class="form-label">Стоимость договора</label>
+{{ form.basic_price }}
+</div>
+<div class="mb-3">
+    <label class="form-label">Организация заказчика</label>
+{{ form.organization }}
+</div>
+<div class="form-check form-switch mb-3">
+  {{ form.contract_completed }}
+  <label class="form-check-label">Активный/действующий договор</label>
+</div>
+
+<div class="d-grid gap-2 d-md-block">
+     <button type="submit"  class="btn btn-success" type="button">Сохранить</button>
+     <a class="btn btn-light" href="/dogovor/{{ dogovor.id }}">Отмена</a>
+<span class="text-danger ms-3 fs-5" >{{ error }}</span>
+</div>
+</form>
+
+</div>
+</div>
+
+
+{% endblock %}

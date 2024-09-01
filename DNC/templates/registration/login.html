@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8">
+  <title>Авторизация</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{% static 'registration/css/sign-in.css' %}">
+
+</head>
+<body class="d-flex align-items-center py-4 bg-body-tertiary" >
+  <main class="form-signin w-100 m-auto">
+
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+<!--      <h1 class="h2 mb-3 fw-normal text-center">Авторизация</h1>-->
+      <div >
+        {{ form.username }}
+      </div>
+      <div >
+        {{ form.password }}
+      </div>
+      <button class="btn btn-primary w-100 py-2" type="submit">Вход</button>
+      <p class="mt-3 mb-3 text-body-secondary">© 2024</p>
+       {% if form.errors %}
+  <p>Несуществующие имя пользователя или пароль. Пожалуйста, попробуйте еще раз.</p>
+{% endif %}
+
+{% if next %}
+  {% if user.is_authenticated %}
+    <p>У аккаунта нет доступа к этой странице. Продолжать,
+     пожалуйста, войдите в учетную запись, у которой есть доступ.</p>
+  {% else %}
+<!--    <p>Чтобы увидеть эту страницу, войдите в систему.</p>-->
+  {% endif %}
+{% endif %}
+    </form>
+
+
+
+  </main>
+
+
+       <script>
+    document.getElementById("id_username").placeholder = "Логин";
+    document.getElementById("id_password").placeholder = "Пароль";
+  </script>
+
+</body>
+</html>
