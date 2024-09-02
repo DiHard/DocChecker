@@ -283,7 +283,7 @@ def callback_handler(call):
            zacup.status = "На просчете"
            zacup.save()
            # Отправляем ID чата
-       bot.send_message(call.message.chat.id, f"Вы забронировали закупку: {zacup.doc_number}\nЗакупка забронирован за Вами на 48 часов для просчета.")
+       bot.send_message(call.message.chat.id, f"Вы забронировали закупку: {zacup.doc_number}\nЗакупка забронирована за Вами на 48 часов для просчета.")
        clear_bot_buttons(call.message.id, call.message.chat.id)
 # Конец кода отвечающего за действия по нажатию кнопок
 

@@ -1,6 +1,6 @@
 from dateutil import parser
 
-error_text = "Неверный формат даты и времени. Необходимый формат: год-месяц-день часы:минуты.\nПример корректного ввода: 2024-12-25 11:50.\nПопробуйте еще раз."
+error_text = "Неверный формат даты и времени. Необходимый формат: день.месяц.год часы:минуты.\nПример корректного ввода: 25.12.2024 11:50.\nПопробуйте еще раз."
 def translate_months(russian_date_str):
    russian_date_str = russian_date_str.replace('года', '')
    russian_date_str = russian_date_str.replace('год', '')

@@ -6,7 +6,7 @@ from tgbot.models import Zacup, Botuser
 # Create your views here.
 @login_required
 def index(request):
-    zacup_list = Zacup.objects.all()
+    zacup_list = Zacup.objects.all().order_by('-booking_date')
     content = {
         'title': 'Главная страница сайта',
         'zacup_list': zacup_list
