@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from tgbot.models import Zacup, Botuser
+
+from tgbot.forms import BotsettingsForm
+from tgbot.models import Zacup, Botuser, Botsettings
 
 
 # Create your views here.
@@ -20,3 +22,26 @@ def users(request):
         'users_list': users_list
     }
     return render(request, 'tgbot/users.html', content)
+
+
+
+@login_required
+def bot_settings(request):
+    # Редактирование настроек проекта
+    settings_set = Botsettings.objects.get(id=1)
+    error = ''
+    form = BotsettingsForm(instance=settings_set)
+    context = {
+        'form': form,
+        'settings_set': settings_set,
+        'error': error
+    }
+    if request.method == 'POST':
+        form = BotsettingsForm(request.POST, instance=settings_set)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+            # return render(request, 'tgbot/settings.html', context)
+        else:
+            error = 'Произошла ошибка сохранения: форма содержала некоректные данные'
+    return render(request, 'tgbot/settings.html', context)

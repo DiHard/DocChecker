@@ -1,0 +1,37 @@
+{% extends 'tgbot/base.html' %}
+
+
+{% block title %}Редактировать договор{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Настройки проекта</h1>
+<div class="card border-light shadow p-3 bg-body rounded">
+    <h4 class="ms-2">Редактировать настройки проекта</h4>
+  <div class="m-2">
+<form method="POST">
+    {% csrf_token %}
+<div class="mb-3">
+    <label class="form-label">Время запуска проверки/напоминания о необходимости подтвердить статус закупки</label>
+{{ form.check_time }}
+</div>
+<div class="mb-3">
+    <label class="form-label">Телеграм id администратора сервиса (ему будут приходить подтверждения регистрации и победы)</label>
+{{ form.admin_tgid }}
+</div>
+<div class="mb-3">
+    <label class="form-label">Токен телеграм бота</label>
+{{ form.bot_token }}
+</div>
+
+<div class="d-grid gap-2 d-md-block">
+     <button type="submit"  class="btn btn-success" type="button">Сохранить</button>
+<!--     <a class="btn btn-light" href="/dogovor/{{ dogovor.id }}">Отмена</a>-->
+<span class="text-danger ms-3 fs-5" >{{ error }}</span>
+</div>
+</form>
+
+</div>
+</div>
+
+
+{% endblock %}
