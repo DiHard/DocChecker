@@ -101,13 +101,13 @@
 <!--          Информация-->
 <!--        </a>-->
 <!--      </li>-->
+      <li>
+        <a href="/admin" class="nav-link link-body-emphasis">
+          <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#info"></use></svg>
+          Управление БД
+        </a>
+      </li>
 <hr> <!-- Разделительная линия -->
-<!--      <li>-->
-<!--        <a href="/admin" class="nav-link link-body-emphasis">-->
-<!--          <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>-->
-<!--          Админка-->
-<!--        </a>-->
-<!--      </li>-->
       <li>
         <form action="{% url 'logout' %}" method="post">
              {% csrf_token %}

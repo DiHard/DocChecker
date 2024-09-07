@@ -36,7 +36,7 @@ def start(message):
       if user.tg_id == chat_id:
           if user.access_granted:
               bot.send_message(chat_id, f"Здравствуйте, {user.user_name}.\nДля бронирования просчета введите номер закупки.")
-              bot.register_next_step_handler(message, check_number)
+              bot.register_next_step_handler(message, check_user)
           else:
               bot.send_message(chat_id,
                                f"Здравствуйте, {user.user_name}.\nНа текущий момент Ваш доступ к боту не подтвержден.\nОжидайте подтверждения или свяжитесь с администрацией.")
@@ -91,6 +91,24 @@ def get_name(message, surname):
 
 # Конец регистрации пользователя
 
+
+def check_user(message):
+    chat_id = message.chat.id
+    try:
+        user = Botuser.objects.get(tg_id=chat_id)
+        if user.access_granted:
+            check_number(message)
+        else:
+            bot.send_message(chat_id, "Для Вашего профиля ограниен доступ к системе. Обратитесь к администратору сервиса.")
+            bot.clear_step_handler_by_chat_id(chat_id)
+            clear_bot_buttons(message.id, chat_id)
+            bot.register_next_step_handler(message, start)
+    except:
+        bot.send_message(chat_id, "Ваш провиль не найден в системе. Обратитесь к администратору сервиса.")
+        bot.clear_step_handler_by_chat_id(chat_id)
+        clear_bot_buttons(message.id, chat_id)
+
+
 # Проверка номера договора
 def check_number(message):
    chat_id = message.chat.id
@@ -105,7 +123,7 @@ def check_number(message):
    markup.add(zabronirovat_button)
    if message.text == '/start':
        bot.send_message(chat_id, "Бот запущен, введите номер заявки для проверки.")
-       bot.register_next_step_handler(message, check_number)
+       bot.register_next_step_handler(message, check_user)
    else:
        for el in register_number:
            if doc_number.upper().replace(" ", "") == el.doc_number:
@@ -133,14 +151,14 @@ def check_number(message):
                        usermenu.add(rentable_button, otcaz_button, nothing_button)
                        text_message = f"Информация по закупке №{el.doc_number} -->\nЗакупка закреплена за Вами.\nСтатус закупки: {el.status}.\nВы можете перевести закупку в статус 'Участвуем' или отказатся от просчета"
                        bot.send_message(chat_id, text_message, reply_markup=usermenu)
-                   bot.register_next_step_handler(message, check_number)
+                   bot.register_next_step_handler(message, check_user)
                else:
                    bot.send_message(chat_id, f"Информация по закупке №{el.doc_number} -->\n❌ Эта закупка уже занята другим сотрудником.\nСтатус закупки: {el.status}.\nДата бронирования: {str(el.booking_date)[0:16]}\nДля проверки другой закупки введите номер тендера.")
-                   bot.register_next_step_handler(message, check_number)
+                   bot.register_next_step_handler(message, check_user)
                break
        if number_free:
            bot.reply_to(message, "✅ Закупка свободна для просчета", reply_markup=markup)
-           bot.register_next_step_handler(message, check_number)
+           bot.register_next_step_handler(message, check_user)
 
 
 def set_status_rentable(message, doc_number):
@@ -159,7 +177,7 @@ def set_status_rentable(message, doc_number):
         zacup.final_date = datetime.fromisoformat(final_date)
         zacup.save()
         bot.send_message(message.chat.id, f"Для закупки №{doc_number} --> сохранена дата окончания приема заявок: {(zacup.final_date).strftime("%d.%m.%Y %H:%M")} и закупка переведена в статус 'Участвуем'.\nЕсли нужно указать другую дату или время, то нажмите кнопку 'Поменять время'", reply_markup=markup)
-        bot.register_next_step_handler(message, check_number)
+        bot.register_next_step_handler(message, check_user)
 
 
 # Эта часть кода отвечает за действия по нажатию кнопок
@@ -359,15 +377,18 @@ def reolad_bot():
    for el in all_users:
        # print(el.tg_id, el.access_granted)
        if el.access_granted:
-           bot.register_next_step_handler_by_chat_id(el.tg_id, check_number)
+           bot.register_next_step_handler_by_chat_id(el.tg_id, check_user)
        else:
            bot.register_next_step_handler_by_chat_id(el.tg_id, start)
 
 
 
-
 reolad_bot()
+
 
 bot.send_message(373322649, "Бот был перезапущен.")
 
-bot.polling()
+# Для работы бота обычно используется polling, но бот тогда часто перезапускается, тк им не пользуются долго,
+# infinity_polling решает эту проблему
+# bot.polling()
+bot.infinity_polling(timeout=10, long_polling_timeout = 5)
