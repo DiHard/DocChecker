@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from rest_framework import permissions
 from rest_framework.viewsets import ModelViewSet
 
 from tgbot.forms import BotsettingsForm
@@ -7,7 +8,6 @@ from tgbot.models import Zacup, Botuser, Botsettings
 from tgbot.serializers import ZacupSerializer, BotuserSerializer
 
 
-# Create your views here.
 @login_required
 def index(request):
     zacup_list = Zacup.objects.all().exclude(id=20).order_by('-booking_date')
@@ -50,8 +50,10 @@ def bot_settings(request):
 class ZacupView(ModelViewSet):
     queryset = Zacup.objects.all()
     serializer_class = ZacupSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class BotuserView(ModelViewSet):
     queryset = Botuser.objects.all()
     serializer_class = BotuserSerializer
+    permission_classes = [permissions.IsAuthenticated]
