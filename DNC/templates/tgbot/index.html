@@ -27,9 +27,15 @@
 <tr>
     <td>№ {{ el.doc_number }}</td>
     <td>{{ el.status }}</td>
-    <td>{{ el.final_date }}</td>
-    <td>{{ el.bot_user.user_surname }}</a> </td>
-    <td>{{ el.booking_date }}</a> </td>
+    <td>
+        {% if el.final_date is none %}
+        -
+        {% else %}
+        {{ el.final_date }}
+        {% endif %}
+    </td>
+    <td>{{ el.bot_user.user_surname }} {{ el.bot_user.user_name }}</td>
+    <td>{{ el.booking_date }}</td>
 </tr>
 
 {% endfor %}

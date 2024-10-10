@@ -1,3 +1,14 @@
+asgiref==3.8.1
+certifi==2024.8.30
+charset-normalizer==3.3.2
 Django==5.0.4
 djangorestframework==3.15.2
+idna==3.10
 pyTelegramBotAPI==4.23.0
+python-dateutil==2.9.0.post0
+requests==2.32.3
+schedule==1.2.2
+six==1.16.0
+sqlparse==0.5.1
+tzdata==2024.2
+urllib3==2.2.3
