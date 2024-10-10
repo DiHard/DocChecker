@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from rest_framework.viewsets import ModelViewSet
 
 from tgbot.forms import BotsettingsForm
 from tgbot.models import Zacup, Botuser, Botsettings
+from tgbot.serializers import ZacupSerializer, BotuserSerializer
 
 
 # Create your views here.
@@ -22,8 +24,6 @@ def users(request):
         'users_list': users_list
     }
     return render(request, 'tgbot/users.html', content)
-
-
 
 @login_required
 def bot_settings(request):
@@ -45,3 +45,13 @@ def bot_settings(request):
         else:
             error = 'Произошла ошибка сохранения: форма содержала некоректные данные'
     return render(request, 'tgbot/settings.html', context)
+
+
+class ZacupView(ModelViewSet):
+    queryset = Zacup.objects.all()
+    serializer_class = ZacupSerializer
+
+
+class BotuserView(ModelViewSet):
+    queryset = Botuser.objects.all()
+    serializer_class = BotuserSerializer

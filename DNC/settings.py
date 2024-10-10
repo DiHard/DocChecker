@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tgbot',
     'DNC',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
