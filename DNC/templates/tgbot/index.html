@@ -10,40 +10,103 @@
 <div class="card border-light shadow p-3 bg-body rounded mt-3">
 
 <div class="card-body px-0 py-0">
+<div class="btn-group">
+  <a href="#" class="btn btn-light" onclick="load()" data-button-name="Свободный">Свободный</a>
+  <a href="#" class="btn btn-light" onclick="load()" data-button-name="На просчете">На просчете</a>
+  <a href="#" class="btn btn-light" onclick="load()" data-button-name="Участвуем">Участвуем</a>
+  <a href="#" class="btn btn-light" onclick="load()" data-button-name="Победа">Победа</a>
+</div>
+<hr>
 <div class="table-responsive scrollbar">
     <table class="table table-sm fs-10 mb-0 overflow-hidden">
         <thead >
             <tr>
-                <th class="bg-secondary-subtle">Номер закупки</th>
-                <th class="bg-secondary-subtle">Статус</th>
+                <th style="min-width:250px;" class="bg-secondary-subtle">Номер закупки</th>
+                <th style="min-width:130px;" class="bg-secondary-subtle">Статус</th>
                 <th class="bg-secondary-subtle">Окончание подачи заявок</th>
                 <th class="bg-secondary-subtle">Пользователь</th>
                 <th class="bg-secondary-subtle">Дата закрепления за пользователем</th>
             </tr>
         </thead>
-        <tbody>
-{% for el in zacup_list %}
-
-<tr>
-    <td>№ {{ el.doc_number }}</td>
-    <td>{{ el.status }}</td>
-    <td>
-        {% if el.final_date is none %}
-        -
-        {% else %}
-        {{ el.final_date }}
-        {% endif %}
-    </td>
-    <td>{{ el.bot_user.user_surname }} {{ el.bot_user.user_name }}</td>
-    <td>{{ el.booking_date }}</td>
-</tr>
-
-{% endfor %}
-        </tbody>
+        <tbody id="tableBody">
     </table>
 </div>
 </div>
 </div>
 
+
+<script>
+  // Функция для изменения класса кнопки
+  function toggleButtonClass(button) {
+    button.classList.toggle('active');
+    // Обновление состояния в localstorage
+    updateLocalStorage();
+  }
+
+  // Функция для обновления состояния кнопок в localstorage
+  function updateLocalStorage() {
+    let activeButtons = [];
+    const buttons = document.querySelectorAll('.btn-group a');
+    buttons.forEach(button => {
+      if (button.classList.contains('active')) {
+        activeButtons.push(button.dataset.buttonName);
+      }
+    });
+    localStorage.setItem('activeButtons', JSON.stringify(activeButtons));
+    localStorage.setItem('buttonStates', JSON.stringify(Array.from(buttons).map(button => button.classList.contains('active'))));
+  }
+
+  // Функция для загрузки состояния кнопок из localstorage
+  function loadButtonStates() {
+    const buttonStates = JSON.parse(localStorage.getItem('buttonStates'));
+    if (buttonStates) {
+      const buttons = document.querySelectorAll('.btn-group a');
+      buttonStates.forEach((state, index) => {
+        if (state) {
+          buttons[index].classList.add('active');
+        }
+      });
+    }
+  }
+
+  // Обработчик клика на кнопки
+  const buttons = document.querySelectorAll('.btn-group a');
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      toggleButtonClass(button);
+    });
+  });
+
+  // Загрузка состояния кнопок при загрузке страницы
+  loadButtonStates();
+
+
+ function load() {
+
+            fetch('/api/zacup/')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('tableBody');
+                    tableBody.innerHTML = '';
+                    data.forEach(item => {
+                        const statuses = JSON.parse(localStorage.getItem('activeButtons')) || ["На просчете", "Участвуем", "Победа"];
+
+                        if (statuses.includes(item.status)) {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${item.doc_number}</td>
+                                <td>${item.status}</td>
+                                <td>${new Date(item.final_date).toLocaleDateString()}</td>
+                                <td>${item.bot_user}</td>
+                                <td>${new Date(item.booking_date).toLocaleDateString()}</td>
+                            `;
+                            tableBody.appendChild(row);
+                        }
+                    });
+                });
+        }
+        // Загрузка данных при загрузке страницы
+        load();
+</script>
 
 {% endblock %}
