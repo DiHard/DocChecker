@@ -48,12 +48,12 @@ def bot_settings(request):
 
 
 class ZacupView(ModelViewSet):
-    queryset = Zacup.objects.all()
+    queryset = Zacup.objects.all().exclude(id=20).order_by('-booking_date')
     serializer_class = ZacupSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 
 class BotuserView(ModelViewSet):
-    queryset = Botuser.objects.all()
+    queryset = Botuser.objects.all().exclude(id=20)
     serializer_class = BotuserSerializer
     permission_classes = [permissions.IsAuthenticated]

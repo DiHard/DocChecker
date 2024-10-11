@@ -89,7 +89,7 @@
                     const tableBody = document.getElementById('tableBody');
                     tableBody.innerHTML = '';
                     data.forEach(item => {
-                        const statuses = JSON.parse(localStorage.getItem('activeButtons')) || ["На просчете", "Участвуем", "Победа"];
+                        const statuses = JSON.parse(localStorage.getItem('activeButtons')) || ["Свободный", "На просчете", "Участвуем", "Победа"];
 
                         if (statuses.includes(item.status)) {
                             const row = document.createElement('tr');
