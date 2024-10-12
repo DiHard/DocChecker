@@ -97,7 +97,7 @@
                                 <td>${item.doc_number}</td>
                                 <td>${item.status}</td>
                                 <td>${new Date(item.final_date).toLocaleDateString()}</td>
-                                <td>${item.bot_user}</td>
+                                <td>${item.bot_user.user_surname + " " + item.bot_user.user_name}</td>
                                 <td>${new Date(item.booking_date).toLocaleDateString()}</td>
                             `;
                             tableBody.appendChild(row);
