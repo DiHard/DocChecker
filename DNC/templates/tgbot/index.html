@@ -91,17 +91,22 @@
                     data.forEach(item => {
                         const statuses = JSON.parse(localStorage.getItem('activeButtons')) || ["Свободный", "На просчете", "Участвуем", "Победа"];
 
-                        if (statuses.includes(item.status)) {
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
+                            if (statuses.includes(item.status)) {
+                              const row = document.createElement('tr');
+                              const formattedDateTime = item.final_date ? new Date(item.final_date).toLocaleDateString() + " " +
+                                                                        new Date(item.final_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "-";
+
+                              row.innerHTML = `
                                 <td>${item.doc_number}</td>
                                 <td>${item.status}</td>
-                                <td>${new Date(item.final_date).toLocaleDateString()}</td>
+                                <td>${formattedDateTime}</td>
                                 <td>${item.bot_user.user_surname + " " + item.bot_user.user_name}</td>
                                 <td>${new Date(item.booking_date).toLocaleDateString()}</td>
-                            `;
-                            tableBody.appendChild(row);
-                        }
+                              `;
+                              tableBody.appendChild(row);
+                            }
+
+
                     });
                 });
         }
