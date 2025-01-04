@@ -358,18 +358,28 @@ def check_victory():
                              reply_markup=markup)
 
 
+def close_access():
+    users = Botuser.objects.filter(access_granted=True).exclude(id=20)
+    data = datetime.now() - timedelta(days=31)
+    for el in users:
+        zacups = Zacup.objects.filter(bot_user=el).filter(booking_date__gte=data)
+        if not any(zacups):
+            message = (f'У пользователя {el.user_surname} {el.user_name} нет новых закупок более 30 дней.'
+                  f' Пользователю закрыт доступ к боту.')
+            el.access_granted = False
+            el.save()
+            bot.send_message(Admin_tgid, message)
+            bot.send_message(373322649, message)
 
 def schedule_messages():
    time = botsettings.check_time
    schedule.every().day.at(time).do(send_daily_message)
    schedule.every().day.at(time).do(check_victory)
+   schedule.every().day.at(time).do(close_access)
    while True:
        schedule.run_pending()
        sleep(1)  # Задержка в 1 секунду для снижения нагрузки на CPU
 
-
-# Создаем и запускаем поток для планирования
-threading.Thread(target=schedule_messages, daemon=True).start()
 
 def reolad_bot():
    all_users = Botuser.objects.all()
@@ -381,9 +391,10 @@ def reolad_bot():
            bot.register_next_step_handler_by_chat_id(el.tg_id, start)
 
 
+# Создаем и запускаем поток для планирования
+threading.Thread(target=schedule_messages, daemon=True).start()
 
 reolad_bot()
-
 
 bot.send_message(373322649, "Бот был перезапущен.")
 
